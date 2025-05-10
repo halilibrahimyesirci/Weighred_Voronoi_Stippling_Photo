@@ -57,6 +57,9 @@ stippling-app
    ```
 2. Use the interface to load an image, adjust stippling parameters, and visualize the stippled output.
 
+## NOTE:
+If you wanted to test it with a simple code line there is `basic_code.py`.
+
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
 
