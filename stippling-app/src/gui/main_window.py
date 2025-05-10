@@ -106,25 +106,32 @@ class MainWindow(ctk.CTk):
             # Call the stippling function
             start_time = time.time()
             
-            # This is where we call your stippling algorithm
-            result_image, points = detect_object_with_stippling(
+            # Call the updated stippling algorithm with object extraction
+            result = detect_object_with_stippling(
                 self.image_path,
                 n_points=n_points,
                 lloyd_iterations=lloyd_iterations,
                 return_image=True,
+                extract_object=True,  # Enable object extraction
                 progress_callback=self._update_progress
             )
+            
+            # Unpack the results - should be (stippled_image, points, extracted_image)
+            if len(result) == 3:
+                stippled_image, points, extracted_image = result
+            else:
+                stippled_image, points = result
+                extracted_image = None
             
             processing_time = time.time() - start_time
             print(f"Processing completed in {processing_time:.2f} seconds")
             
-            # Update the UI with the result
-            self.after(100, lambda: self._update_ui_with_result(result_image))
+            # Update the UI with the results
+            self.after(100, lambda: self._update_ui_with_result(stippled_image, extracted_image))
             
         except Exception as e:
             error_message = str(e)
             print(f"Error processing image: {error_message}")
-            # Fix: Store error_message in a separate variable to use in lambda
             self.after(100, lambda error=error_message: self._handle_processing_error(error))
         finally:
             # Reset processing state
@@ -134,9 +141,16 @@ class MainWindow(ctk.CTk):
         """Update the progress bar from the processing thread"""
         self.after(10, lambda: self.progress_bar.update_load(progress_value))
     
-    def _update_ui_with_result(self, result_image):
-        """Update the UI with the processed image"""
-        self.image_display.show_stippled_image(result_image)
+    def _update_ui_with_result(self, stippled_image, extracted_image=None):
+        """Update the UI with the processed images"""
+        # Show the stippled image
+        self.image_display.show_stippled_image(stippled_image)
+        
+        # Show the extracted object if available
+        if extracted_image is not None:
+            self.image_display.show_extracted_image(extracted_image)
+        
+        # Update progress bar to completion
         self.progress_bar.update_load(1.0)
     
     def _handle_processing_error(self, error_message):
