@@ -1,7 +1,50 @@
 # Stippling App
 
 ## Overview
-The Stippling App is a Python application that utilizes image processing techniques to create stippled representations of images. It features a user-friendly interface built with CustomTkinter, allowing users to adjust stippling parameters and visualize the results in real-time.
+`Weighted Voronoi Stippling Project Explanation`
+Hello! I'd like to walk you through the key components of our Weighted Voronoi Stippling application. This is a Python application that uses image processing techniques to create a stippled representation of an image, which can be useful for artistic effects and object detection.
+
+`Main Application Structure`
+The main application file (app.py) is quite simple - it configures the CustomTkinter appearance, creates the main window, and starts the application:
+
+`Core Algorithm`
+The core of our application is the Weighted Voronoi Stippling algorithm. Here's how it works:
+
+`Image Processing:` We convert the image to grayscale and create an intensity map.
+`Point Generation:` We generate points with higher density in darker areas of the image.
+`Lloyd Relaxation:` This is an iterative process that evenly distributes points while respecting the density requirements.
+`Boundary Constraints:` We've added constraints to keep points within the high-intensity regions (object boundaries).
+The algorithm creates a stippled representation where each dot represents a portion of the image, with more dots in darker/more detailed areas.
+
+`GUI Components`
+Our GUI consists of several components:
+
+`Main Window:` Coordinates all the other components and handles the main processing logic.
+`Image Display:` Shows the original image, stippled result, and extracted object with transparency.
+`Controls Frame:` Contains sliders for adjusting parameters like point count and iteration count.
+`Progress Bar:` Shows the computational load and processing progress.
+Object Extraction Feature
+One of the more advanced features is the object extraction, which:
+
+Uses the stippling points to identify the object region
+Creates a mask from these points
+Extracts the object from the original image
+Makes the background transparent
+This is particularly useful for isolating objects from their backgrounds for further use.
+
+`Performance Considerations`
+We've implemented several optimizations:
+
+`Multithreading:` Processing happens in a background thread to keep the UI responsive
+`Memory Management:` We're careful about how we store and process images to minimize RAM usage
+`Efficient Algorithms:` We use vectorized operations with NumPy whenever possible
+
+`File Handling`
+Our application handles file operations with special care:
+
+`Non-ASCII Characters:` We have utilities to handle filenames with special characters
+Saving Options: Users can save both the stippled image and the extracted object
+This makes the application more user-friendly, especially for international users.
 
 ## Features
 - Load images and convert them to grayscale.
